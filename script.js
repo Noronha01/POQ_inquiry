@@ -6,19 +6,24 @@ fetch(sheet_url)
   .then((response) => response.text())
   .then((csvText) => handleResponse(csvText));
 
-function handleResponse(csvText) {
-  let sheetObjects = csvToObjects(csvText);
-  // Assuming "Qual é a tua idade" corresponds to "Age" in English
-  const ageDistribution = getDataDistribution(sheetObjects, "Qual é a tua idade");
-
-  // Prepare data for Chart.js
-  const labels = Object.keys(ageDistribution);
-  const data = Object.values(ageDistribution);
-
-  // Create chart
-  const ageCtx = document.getElementById('ageChart').getContext('2d');
-  createBarChart(ageCtx, labels, data, 'Age Distribution');
-}
+  function handleResponse(csvText) {
+    let sheetObjects = csvToObjects(csvText);
+    // Assuming "Qual é a tua idade" corresponds to "Age" in English
+    const ageDistribution = getDataDistribution(sheetObjects, "Qual é a tua idade");
+  
+    // Prepare data for Chart.js and sort by age categories
+    const labels = Object.keys(ageDistribution).sort(compareAgeLabels);
+    const data = labels.map(label => ageDistribution[label]);
+  
+    // Create chart
+    const ageCtx = document.getElementById('ageChart').getContext('2d');
+    createBarChart(ageCtx, labels, data, 'Age Distribution');
+  }
+  
+  function compareAgeLabels(a, b) {
+    const ageRanges = ["< 18", "18 - 30", "30 - 40", "40 - 50", "50 - 60", "> 60"]; // Define your preferred order
+    return ageRanges.indexOf(a) - ageRanges.indexOf(b);
+  }
 
 function csvToObjects(csv) {
   const csvRows = csv.split("\n");
@@ -60,14 +65,23 @@ function createBarChart(ctx, labels, data, label) {
         data: data,
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
         borderColor: 'rgba(75, 192, 192, 1)',
-        borderWidth: 1
+        borderWidth: 1,
+        color: 'white',
       }]
     },
     options: {
       scales: {
         y: {
-          beginAtZero: true
-        }
+          beginAtZero: true,
+          ticks: {
+            color: 'white' // Text color for y-axis labels
+          }
+        },
+        x: {
+          ticks: {
+            color: 'white' // Text color for x-axis labels
+          }
+        },
       }
     }
   });
