@@ -157,13 +157,6 @@ function createBarChart(ctx, labels, data, datasetLabel) {
           }
         }
       },
-      responsive: true,
-      maintainAspectRatio: false,
-      layout: {
-        padding: {
-          top: 20
-        }
-      }
     }
   });
 }
