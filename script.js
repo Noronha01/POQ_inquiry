@@ -16,7 +16,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   const latestSubmission = findLatestSubmission(sheetObjects);
   if (latestSubmission) {
     const hoursAgo = calculateHoursAgo(latestSubmission);
-    console.log(hoursAgo);
     displayLatestSubmissionTime(hoursAgo);
   } else {
     displayLatestSubmissionTime('Unknown'); // If no submissions found
@@ -134,13 +133,29 @@ function createBarChart(ctx, labels, data, label) {
         data: data,
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
         borderColor: 'rgba(75, 192, 192, 1)',
-        borderWidth: 1
+        borderWidth: 1,
+        color: 'white', // Text color for dataset
       }]
     },
     options: {
       scales: {
         y: {
-          beginAtZero: true
+          beginAtZero: true,
+          ticks: {
+            color: 'white' // Text color for y-axis labels
+          }
+        },
+        x: {
+          ticks: {
+            color: 'white' // Text color for x-axis labels
+          }
+        }
+      },
+      plugins: {
+        legend: {
+          labels: {
+            color: 'white' // Text color for legend labels
+          }
         }
       }
     }
