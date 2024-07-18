@@ -14,6 +14,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Display age distribution chart
   displayAgeDistributionChart(sheetObjects);
+
+  displayExperienceDistributionChart(sheetObjects);
 });
 
 async function fetchSheetData(url) {
@@ -61,6 +63,15 @@ function displayAgeDistributionChart(data) {
 function compareAgeLabels(a, b) {
   const ageRanges = ["18 - 30", "30 - 40", "40 - 50", "50 - 60"];
   return ageRanges.indexOf(a) - ageRanges.indexOf(b);
+}
+
+function displayExperienceDistributionChart(data) {
+  const experienceDistribution = getDataDistribution(data, "Há quanto tempo jogas padel?");
+  const labels = Object.keys(experienceDistribution).sort(compareExperienceLabels);
+  const dataValues = labels.map(label => experienceDistribution[label]);
+
+  const experienceCtx = document.getElementById('experienceChart').getContext('2d');
+  createBarChart(experienceCtx, labels, dataValues, 'Padel Experience Distribution');
 }
 
 function getDataDistribution(data, key) {
