@@ -141,12 +141,12 @@ function createBarChart(ctx, labels, data, datasetLabel) {
         y: {
           beginAtZero: true,
           ticks: {
-            color: 'white'
+            color: 'white' // Set text color for y-axis ticks
           }
         },
         x: {
           ticks: {
-            color: 'white'
+            color: 'white' // Set text color for x-axis ticks
           }
         }
       },
@@ -163,7 +163,7 @@ function createBarChart(ctx, labels, data, datasetLabel) {
         padding: {
           top: 20
         }
-      },
+      }
     }
   });
 }
