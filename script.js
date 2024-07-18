@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const latestSubmission = findLatestSubmission(sheetObjects);
   if (latestSubmission) {
     const hoursAgo = calculateHoursAgo(latestSubmission);
+    console.log(hoursAgo);
     displayLatestSubmissionTime(hoursAgo);
   } else {
     displayLatestSubmissionTime('Unknown'); // If no submissions found
