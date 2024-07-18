@@ -123,18 +123,17 @@ function getDataDistribution(data, key) {
   return distribution;
 }
 
-function createBarChart(ctx, labels, data, label) {
+function createBarChart(ctx, labels, data, datasetLabel) {
   new Chart(ctx, {
     type: 'bar',
     data: {
       labels: labels,
       datasets: [{
-        label: label,
+        label: datasetLabel,
         data: data,
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
         borderColor: 'rgba(75, 192, 192, 1)',
-        borderWidth: 1,
-        color: 'white', // Text color for dataset
+        borderWidth: 1
       }]
     },
     options: {
@@ -142,12 +141,12 @@ function createBarChart(ctx, labels, data, label) {
         y: {
           beginAtZero: true,
           ticks: {
-            color: 'white' // Text color for y-axis labels
+            color: 'white'
           }
         },
         x: {
           ticks: {
-            color: 'white' // Text color for x-axis labels
+            color: 'white'
           }
         }
       },
@@ -157,7 +156,14 @@ function createBarChart(ctx, labels, data, label) {
             color: 'white' // Text color for legend labels
           }
         }
-      }
+      },
+      responsive: true,
+      maintainAspectRatio: false,
+      layout: {
+        padding: {
+          top: 20
+        }
+      },
     }
   });
 }
