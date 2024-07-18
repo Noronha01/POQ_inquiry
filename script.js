@@ -2,28 +2,27 @@ const sheet_id = '1pNOb0Bbsz410BD_7jUf-G0tH15AB6momF7_RsyevqmA';
 const sheet_name = encodeURIComponent("inquiry_data");
 const sheet_url = `https://docs.google.com/spreadsheets/d/${sheet_id}/gviz/tq?tqx=out:csv&sheet=${sheet_name}`;
 
-fetch(sheet_url)
-  .then((response) => response.text())
-  .then((csvText) => handleResponse(csvText));
+document.addEventListener('DOMContentLoaded', async () => {
+  // Fetch data from Google Sheets CSV
+  const csvData = await fetchSheetData(sheet_url);
 
-  function handleResponse(csvText) {
-    let sheetObjects = csvToObjects(csvText);
-    // Assuming "Qual é a tua idade" corresponds to "Age" in English
-    const ageDistribution = getDataDistribution(sheetObjects, "Qual é a tua idade");
-  
-    // Prepare data for Chart.js and sort by age categories
-    const labels = Object.keys(ageDistribution).sort(compareAgeLabels);
-    const data = labels.map(label => ageDistribution[label]);
-  
-    // Create chart
-    const ageCtx = document.getElementById('ageChart').getContext('2d');
-    createBarChart(ageCtx, labels, data, 'Age Distribution');
+  // Parse CSV data into objects
+  const sheetObjects = csvToObjects(csvData);
+
+  // Display total submissions
+  displayTotalSubmissions(sheetObjects);
+
+  // Display age distribution chart
+  displayAgeDistributionChart(sheetObjects);
+});
+
+async function fetchSheetData(url) {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error('Failed to fetch data');
   }
-  
-  function compareAgeLabels(a, b) {
-    const ageRanges = ["< 18", "18 - 30", "30 - 40", "40 - 50", "50 - 60", "> 60"]; // Define your preferred order
-    return ageRanges.indexOf(a) - ageRanges.indexOf(b);
-  }
+  return response.text();
+}
 
 function csvToObjects(csv) {
   const csvRows = csv.split("\n");
@@ -42,6 +41,26 @@ function csvToObjects(csv) {
 
 function csvSplit(row) {
   return row.split(",").map((val) => val.substring(1, val.length - 1));
+}
+
+function displayTotalSubmissions(data) {
+  const totalSubmissions = data.length; // Assuming each object represents a submission
+  const totalSubmissionsDiv = document.getElementById('totalSubmissions');
+  totalSubmissionsDiv.textContent = totalSubmissions;
+}
+
+function displayAgeDistributionChart(data) {
+  const ageDistribution = getDataDistribution(data, "Qual é a tua idade");
+  const labels = Object.keys(ageDistribution).sort(compareAgeLabels);
+  const dataValues = labels.map(label => ageDistribution[label]);
+
+  const ageCtx = document.getElementById('ageChart').getContext('2d');
+  createBarChart(ageCtx, labels, dataValues, 'Age Distribution');
+}
+
+function compareAgeLabels(a, b) {
+  const ageRanges = ["18 - 30", "30 - 40", "40 - 50", "50 - 60"];
+  return ageRanges.indexOf(a) - ageRanges.indexOf(b);
 }
 
 function getDataDistribution(data, key) {
@@ -65,23 +84,14 @@ function createBarChart(ctx, labels, data, label) {
         data: data,
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
         borderColor: 'rgba(75, 192, 192, 1)',
-        borderWidth: 1,
-        color: 'white',
+        borderWidth: 1
       }]
     },
     options: {
       scales: {
         y: {
-          beginAtZero: true,
-          ticks: {
-            color: 'white' // Text color for y-axis labels
-          }
-        },
-        x: {
-          ticks: {
-            color: 'white' // Text color for x-axis labels
-          }
-        },
+          beginAtZero: true
+        }
       }
     }
   });
