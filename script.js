@@ -12,6 +12,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Display total submissions
   displayTotalSubmissions(sheetObjects);
 
+  // Find latest submission time
+  const latestSubmission = findLatestSubmission(sheetObjects);
+  if (latestSubmission) {
+    const hoursAgo = calculateHoursAgo(latestSubmission);
+    displayLatestSubmissionTime(hoursAgo);
+  } else {
+    displayLatestSubmissionTime('Unknown'); // If no submissions found
+  }
+
   // Display age distribution chart
   displayAgeDistributionChart(sheetObjects);
 
@@ -43,6 +52,30 @@ function csvToObjects(csv) {
 
 function csvSplit(row) {
   return row.split(",").map((val) => val.substring(1, val.length - 1));
+}
+
+function findLatestSubmission(data) {
+  if (data.length === 0) return null;
+
+  // Assuming "Submitted at" is in the format "2024/07/17 17:59:25"
+  const latestSubmission = data[data.length - 1]['Submitted at'];
+  return new Date(latestSubmission);
+}
+
+function calculateHoursAgo(date) {
+  const currentDateTime = new Date();
+  const timeDifference = currentDateTime.getTime() - date.getTime();
+  const hoursDifference = Math.round(timeDifference / (1000 * 60 * 60));
+  return hoursDifference;
+}
+
+function displayLatestSubmissionTime(hoursAgo) {
+  const latestSubmissionDiv = document.getElementById('latestSubmission');
+  if (hoursAgo < 1) {
+    latestSubmissionDiv.textContent = '<1 hour ago';
+  } else {
+    latestSubmissionDiv.textContent = `${hoursAgo} hours ago`;
+  }
 }
 
 function displayTotalSubmissions(data) {
