@@ -74,6 +74,11 @@ function displayExperienceDistributionChart(data) {
   createBarChart(experienceCtx, labels, dataValues, 'Padel Experience Distribution');
 }
 
+function compareExperienceLabels(a, b) {
+  const ageRanges = ["< 6 meses", "6 meses - 1 ano", "1 - 2 anos", "2 - 5 anos"];
+  return ageRanges.indexOf(a) - ageRanges.indexOf(b);
+}
+
 function getDataDistribution(data, key) {
   const distribution = {};
   data.forEach(item => {
