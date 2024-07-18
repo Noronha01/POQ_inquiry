@@ -15,8 +15,17 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start; /* Adjust alignment to top */
       min-height: 100vh;
+      margin: 0; /* Remove default body margin */
+      padding: 20px; /* Add padding to body */
+    }
+
+    h2 {
+      font-size: 32px; /* Larger font size for h2 */
+      text-align: center;
+      width: 100%; /* Ensure full width */
+      margin-bottom: 20px;
     }
 
     .container {
@@ -27,6 +36,7 @@
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
       width: 300px;
       text-align: center;
+      min-height: 150px; /* Adjust minimum height */
     }
 
     h3 {
@@ -45,7 +55,7 @@
 
   <div class="container">
     <h3>Total Submissions</h3>
-    <div id="totalSubmissions"></div>
+    <div id="totalSubmissions" style="font-size: 48px;"></div> <!-- Larger font size for total submissions -->
   </div>
 
   <div class="container">
