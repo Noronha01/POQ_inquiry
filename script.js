@@ -8,9 +8,16 @@ fetch(sheet_url)
 
 function handleResponse(csvText) {
   let sheetObjects = csvToObjects(csvText);
-  // sheetObjects is now an Array of Objects
-  console.log(sheetObjects);
-  // ADD CODE HERE
+  // Assuming "Qual é a tua idade" corresponds to "Age" in English
+  const ageDistribution = getDataDistribution(sheetObjects, "Qual é a tua idade");
+
+  // Prepare data for Chart.js
+  const labels = Object.keys(ageDistribution);
+  const data = Object.values(ageDistribution);
+
+  // Create chart
+  const ageCtx = document.getElementById('ageChart').getContext('2d');
+  createBarChart(ageCtx, labels, data, 'Age Distribution');
 }
 
 function csvToObjects(csv) {
@@ -22,12 +29,6 @@ function csvToObjects(csv) {
     let row = csvSplit(csvRows[i]);
     for (let j = 0, max = row.length; j < max; j++) {
       thisObject[propertyNames[j]] = row[j];
-      // BELOW 4 LINES WILL CONVERT DATES IN THE "ENROLLED" COLUMN TO JS DATE OBJECTS
-      // if (propertyNames[j] === "Enrolled") {
-      //   thisObject[propertyNames[j]] = new Date(row[j]);
-      // } else {
-      //   thisObject[propertyNames[j]] = row[j];
-      // }
     }
     objects.push(thisObject);
   }
@@ -36,4 +37,38 @@ function csvToObjects(csv) {
 
 function csvSplit(row) {
   return row.split(",").map((val) => val.substring(1, val.length - 1));
+}
+
+function getDataDistribution(data, key) {
+  const distribution = {};
+  data.forEach(item => {
+    const value = item[key];
+    if (value) {
+      distribution[value] = (distribution[value] || 0) + 1;
+    }
+  });
+  return distribution;
+}
+
+function createBarChart(ctx, labels, data, label) {
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: label,
+        data: data,
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
 }
