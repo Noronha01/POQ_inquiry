@@ -94,7 +94,7 @@ function displayAgeDistributionChart(data) {
 }
 
 function compareAgeLabels(a, b) {
-  const ageRanges = ["18 - 30", "30 - 40", "40 - 50", "50 - 60"];
+  const ageRanges = ["18 - 30", "30 - 40", "40 - 50", "50 - 60", "> 60"];
   return ageRanges.indexOf(a) - ageRanges.indexOf(b);
 }
 
@@ -108,7 +108,7 @@ function displayExperienceDistributionChart(data) {
 }
 
 function compareExperienceLabels(a, b) {
-  const ageRanges = ["< 6 meses", "6 meses - 1 ano", "1 - 2 anos", "2 - 5 anos"];
+  const ageRanges = ["< 6 meses", "6 meses - 1 ano", "1 - 2 anos", "2 - 5 anos", "> 5 anos"];
   return ageRanges.indexOf(a) - ageRanges.indexOf(b);
 }
 
