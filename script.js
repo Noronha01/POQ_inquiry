@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     displayExperienceDistributionChart(sheetObjects);
     displayWeeklyGamesDistributionChart(sheetObjects);
     displayClassesDistributionChart(sheetObjects);
+    displayLevelDistributionChart(sheetObjects);
   } catch (error) {
     console.error('Error initializing page:', error);
   }
@@ -143,8 +144,8 @@ function displayWeeklyGamesDistributionChart(data) {
 }
 
 function compareWeeklyGamesLabels(a, b) {
-  const ageRanges = ["Irregular", "1 vez", "2 vezes", "3/4 vezes", "5+ vezes"];
-  return ageRanges.indexOf(a) - ageRanges.indexOf(b);
+  const weekly = ["Irregular", "1 vez", "2 vezes", "3/4 vezes", "5+ vezes"];
+  return weekly.indexOf(a) - weekly.indexOf(b);
 }
 
 function getDataDistribution(data, key) {
@@ -156,6 +157,20 @@ function getDataDistribution(data, key) {
     }
   });
   return distribution;
+}
+
+function displayLevelDistributionChart(data) {
+  const levelDistribution = getDataDistribution(data, "Qual é o teu nível agora?");
+  const labels = Object.keys(levelDistribution).sort(compareLevelLabels);
+  const dataValues = labels.map(label => levelDistribution[label]);
+
+  const levelCtx = document.getElementById('levelChart').getContext('2d');
+  createBarChart(levelCtx, labels, dataValues, 'Level Distribution');
+}
+
+function compareLevelLabels(a, b) {
+  const levels = ["Iniciante", "F5/M5", "F4/M4", "F3/M3", "F2/M2", "F1/M1", "Não sei"];
+  return levels.indexOf(a) - levels.indexOf(b);
 }
 
 function createBarChart(ctx, labels, data, datasetLabel) {
