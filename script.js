@@ -90,15 +90,15 @@ function displayLatestSubmissionTime(hoursAgo, minutesAgo) {
   latestSubmissionDiv.textContent = "";
   
   if (hoursAgo == 1) {
-    latestSubmissionDiv.textContent += "1 hour";
+    latestSubmissionDiv.textContent += "1 hour and ";
   } else if (hoursAgo > 1) {
-    latestSubmissionDiv.textContent += `${hoursAgo} hours`;
+    latestSubmissionDiv.textContent += `${hoursAgo} hours and `;
   }
 
   if (minutesAgo == 1) {
-    latestSubmissionDiv.textContent += " and 1 minute ago";
+    latestSubmissionDiv.textContent += "1 minute ago";
   } else {
-    latestSubmissionDiv.textContent += ` and ${minutesAgo} minutes ago`;
+    latestSubmissionDiv.textContent += `${minutesAgo} minutes ago`;
   }
 }
 
