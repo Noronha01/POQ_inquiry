@@ -27,8 +27,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     displayAgeDistributionChart(sheetObjects);
     displayExperienceDistributionChart(sheetObjects);
     displayWeeklyGamesDistributionChart(sheetObjects);
-    displayClassesDistributionChart(sheetObjects);
     displayLevelDistributionChart(sheetObjects);
+    displaySpentDistributionChart(sheetObjects);
+    displayClassesDistributionChart(sheetObjects);
+    displayExpensiveChart(sheetObjects);
+    displayTennisChart(sheetObjects);
+
   } catch (error) {
     console.error('Error initializing page:', error);
   }
@@ -173,6 +177,20 @@ function compareLevelLabels(a, b) {
   return levels.indexOf(a) - levels.indexOf(b);
 }
 
+function displaySpentDistributionChart(data) {
+  const spentDistribution = getDataDistribution(data, "Quanto já gastaste em equipamento (raquetes, bolas, roupa)?");
+  const labels = Object.keys(spentDistribution).sort(compareSpentLabels);
+  const dataValues = labels.map(label => spentDistribution[label]);
+
+  const spentCtx = document.getElementById('spentChart').getContext('2d');
+  createBarChart(spentCtx, labels, dataValues, 'Level Distribution');
+}
+
+function compareSpentLabels(a, b) {
+  const spent_ranges = ["< 100€", "100-250€", "250-500€", "500-1000€", "> 1000€"];
+  return spent_ranges.indexOf(a) - spent_ranges.indexOf(b);
+}
+
 function createBarChart(ctx, labels, data, datasetLabel) {
   new Chart(ctx, {
     type: 'bar',
@@ -215,12 +233,24 @@ function displayClassesDistributionChart(data) {
   const classesDistribution = getDataDistribution(data, "Tens aulas de Padel?");
   const labels = ["Yes", "No"];
   const dataValues = [classesDistribution["Sim"] || 0, classesDistribution["Não"] || 0];
-  console.log(data);
-  console.log('Classes Distribution:', classesDistribution);
-  console.log('Data Values:', dataValues);
-
   const classesCtx = document.getElementById('classesChart').getContext('2d');
-  createPieChart(classesCtx, labels, dataValues, 'Classes');
+  createPieChart(classesCtx, labels, dataValues, '');
+}
+
+function displayExpensiveChart(data) {
+  const classesDistribution = getDataDistribution(data, "Consideras o Padel um desporto caro?");
+  const labels = ["Yes", "No"];
+  const dataValues = [classesDistribution["Sim"] || 0, classesDistribution["Não"] || 0];
+  const expensiveCtx = document.getElementById('expensiveChart').getContext('2d');
+  createPieChart(expensiveCtx, labels, dataValues, '');
+}
+
+function displayTennisChart(data) {
+  const tennisDistribution = getDataDistribution(data, "Já tinhas jogado Ténis antes de começares a jogar Padel?");
+  const labels = ["Yes", "No"];
+  const dataValues = [tennisDistribution["Sim"] || 0, tennisDistribution["Não"] || 0];
+  const tennisCtx = document.getElementById('tennisChart').getContext('2d');
+  createPieChart(tennisCtx, labels, dataValues, '');
 }
 
 function createPieChart(ctx, labels, data, datasetLabel) {
