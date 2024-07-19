@@ -7,9 +7,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   try {
     // Fetch data from Google Sheets CSV
     const csvData = await fetchSheetData(sheet_url);
+    console.log(csvData);
     
     // Parse CSV data into objects
     const sheetObjects = Papa.parse(csvData, { header: true, skipEmptyLines: true }).data;
+    console.log(sheetObjects);
 
     // Display total submissions
     displayTotalSubmissions(sheetObjects);
