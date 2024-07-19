@@ -1,6 +1,7 @@
 const sheet_id = '1pNOb0Bbsz410BD_7jUf-G0tH15AB6momF7_RsyevqmA';
 const sheet_name = encodeURIComponent("inquiry_data");
-const sheet_url = `https://docs.google.com/spreadsheets/d/${sheet_id}/gviz/tq?tqx=out:csv&sheet=${sheet_name}`;
+//const sheet_url = `https://docs.google.com/spreadsheets/d/${sheet_id}/gviz/tq?tqx=out:csv&sheet=${sheet_name}`;
+const sheet_url = `https://docs.google.com/spreadsheets/d/e/2PACX-1vTEaMNC3S5dm1RmKyfvuKk7PDbal5ByZqUkMgC6_3xPYu2E-dkWAbQltdVpznHDjat5AbS4TyOBs3wp/pub?gid=0&single=true&output=csv`;
 
 document.addEventListener('DOMContentLoaded', async () => {
   // Fetch data from Google Sheets CSV
