@@ -170,11 +170,11 @@ function createBarChart(ctx, labels, data, datasetLabel) {
 
 function displayClassesDistributionChart(data) {
   const classesDistribution = getDataDistribution(data, "Tens aulas de Padel?");
-  const labels = ["Sim", "Não"];
-  const dataValues = labels.map(label => classesDistribution[label] || 0);
+  const labels = ["Yes", "No"];
+  const dataValues = [classesDistribution["Sim"] || 0, classesDistribution["Não"] || 0];
 
   const classesCtx = document.getElementById('classesChart').getContext('2d');
-  createPieChart(classesCtx, labels, dataValues, 'Padel Classes Distribution');
+  createPieChart(classesCtx, labels, dataValues, 'Classes');
 }
 
 function createPieChart(ctx, labels, data, datasetLabel) {
