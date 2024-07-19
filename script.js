@@ -15,11 +15,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Find latest submission time
   const latestSubmission = findLatestSubmission(sheetObjects);
   if (latestSubmission) {
-    const hoursAgo = calculateHoursAgo(latestSubmission);
-    displayLatestSubmissionTime(hoursAgo);
+    const { hoursAgo, minutesAgo } = calculateTimeAgo(latestSubmission);
+    displayLatestSubmissionTime(hoursAgo, minutesAgo);
   } else {
-    displayLatestSubmissionTime('Unknown'); // If no submissions found
+    displayLatestSubmissionTime('Unknown', 'Unknown'); // If no submissions found
   }
+
 
   // Display age distribution chart
   displayAgeDistributionChart(sheetObjects);
@@ -62,19 +63,21 @@ function findLatestSubmission(data) {
   return new Date(latestSubmission);
 }
 
-function calculateHoursAgo(date) {
+function calculateTimeAgo(date) {
   const currentDateTime = new Date();
   const timeDifference = currentDateTime.getTime() - date.getTime();
-  const hoursDifference = Math.round(timeDifference / (1000 * 60 * 60));
-  return hoursDifference;
+  const minutesDifference = Math.round(timeDifference / (1000 * 60));
+  const hoursDifference = Math.floor(minutesDifference / 60);
+  const remainingMinutes = minutesDifference % 60;
+  return { hoursAgo: hoursDifference, minutesAgo: remainingMinutes };
 }
 
-function displayLatestSubmissionTime(hoursAgo) {
+function displayLatestSubmissionTime(hoursAgo, minutesAgo) {
   const latestSubmissionDiv = document.getElementById('latestSubmission');
   if (hoursAgo < 1) {
-    latestSubmissionDiv.textContent = '<1 hour ago';
+    latestSubmissionDiv.textContent = `${minutesAgo} minutes ago`;
   } else {
-    latestSubmissionDiv.textContent = `${hoursAgo} hours ago`;
+    latestSubmissionDiv.textContent = `${hoursAgo} hours and ${minutesAgo} minutes ago`;
   }
 }
 
