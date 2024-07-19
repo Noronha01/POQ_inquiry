@@ -4,32 +4,34 @@ const sheet_name = encodeURIComponent("inquiry_data");
 const sheet_url = `https://docs.google.com/spreadsheets/d/e/2PACX-1vTEaMNC3S5dm1RmKyfvuKk7PDbal5ByZqUkMgC6_3xPYu2E-dkWAbQltdVpznHDjat5AbS4TyOBs3wp/pub?gid=0&single=true&output=csv`;
 
 document.addEventListener('DOMContentLoaded', async () => {
-  // Fetch data from Google Sheets CSV
-  const csvData = await fetchSheetData(sheet_url);
+  try {
+    // Fetch data from Google Sheets CSV
+    const csvData = await fetchSheetData(sheet_url);
+    
+    // Parse CSV data into objects
+    const sheetObjects = Papa.parse(csvData, { header: true, skipEmptyLines: true }).data;
 
-  // Parse CSV data into objects
-  const sheetObjects = csvToObjects(csvData);
+    // Display total submissions
+    displayTotalSubmissions(sheetObjects);
 
-  // Display total submissions
-  displayTotalSubmissions(sheetObjects);
+    // Find latest submission time
+    const latestSubmission = findLatestSubmission(sheetObjects);
+    if (latestSubmission) {
+      const { hoursAgo, minutesAgo } = calculateTimeAgo(latestSubmission);
+      displayLatestSubmissionTime(hoursAgo, minutesAgo);
+    } else {
+      displayLatestSubmissionTime('Unknown', 'Unknown'); // If no submissions found
+    }
 
-  // Find latest submission time
-  const latestSubmission = findLatestSubmission(sheetObjects);
-  if (latestSubmission) {
-    const { hoursAgo, minutesAgo } = calculateTimeAgo(latestSubmission);
-    displayLatestSubmissionTime(hoursAgo, minutesAgo);
-  } else {
-    displayLatestSubmissionTime('Unknown', 'Unknown'); // If no submissions found
+    // Display age distribution chart
+    displayAgeDistributionChart(sheetObjects);
+    displayExperienceDistributionChart(sheetObjects);
+    displayClassesDistributionChart(sheetObjects);
+  } catch (error) {
+    console.error('Error initializing page:', error);
   }
-
-
-  // Display age distribution chart
-  displayAgeDistributionChart(sheetObjects);
-
-  displayExperienceDistributionChart(sheetObjects);
-
-  displayClassesDistributionChart(sheetObjects);
 });
+
 
 async function fetchSheetData(url) {
   const response = await fetch(url);
