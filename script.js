@@ -87,10 +87,18 @@ function calculateTimeAgo(date) {
 
 function displayLatestSubmissionTime(hoursAgo, minutesAgo) {
   const latestSubmissionDiv = document.getElementById('latestSubmission');
-  if (hoursAgo < 1) {
-    latestSubmissionDiv.textContent = `${minutesAgo} minutes ago`;
+  latestSubmissionDiv.textContent = "";
+  
+  if (hoursAgo == 1) {
+    latestSubmissionDiv.textContent += "1 hour";
+  } else if (hoursAgo > 1) {
+    latestSubmissionDiv.textContent += `${hoursAgo} hours`;
+  }
+
+  if (minutesAgo == 1) {
+    latestSubmissionDiv.textContent += " and 1 minute ago";
   } else {
-    latestSubmissionDiv.textContent = `${hoursAgo} hours and ${minutesAgo} minutes ago`;
+    latestSubmissionDiv.textContent += ` and ${minutesAgo} minutes ago`;
   }
 }
 
