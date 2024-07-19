@@ -26,6 +26,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   displayAgeDistributionChart(sheetObjects);
 
   displayExperienceDistributionChart(sheetObjects);
+
+  displayClassesDistributionChart(sheetObjects);
 });
 
 async function fetchSheetData(url) {
@@ -162,6 +164,40 @@ function createBarChart(ctx, labels, data, datasetLabel) {
           }
         }
       },
+    }
+  });
+}
+
+function displayClassesDistributionChart(data) {
+  const classesDistribution = getDataDistribution(data, "Tens aulas de Padel?");
+  const labels = ["Sim", "Não"];
+  const dataValues = labels.map(label => classesDistribution[label] || 0);
+
+  const classesCtx = document.getElementById('classesChart').getContext('2d');
+  createPieChart(classesCtx, labels, dataValues, 'Padel Classes Distribution');
+}
+
+function createPieChart(ctx, labels, data, datasetLabel) {
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: datasetLabel,
+        data: data,
+        backgroundColor: ['rgba(75, 192, 192, 0.2)', 'rgba(192, 75, 75, 0.2)'],
+        borderColor: ['rgba(75, 192, 192, 1)', 'rgba(192, 75, 75, 1)'],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      plugins: {
+        legend: {
+          labels: {
+            color: 'white' // Text color for legend labels
+          }
+        }
+      }
     }
   });
 }
