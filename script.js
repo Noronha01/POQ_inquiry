@@ -172,6 +172,7 @@ function displayClassesDistributionChart(data) {
   const classesDistribution = getDataDistribution(data, "Tens aulas de Padel?");
   const labels = ["Yes", "No"];
   const dataValues = [classesDistribution["Sim"] || 0, classesDistribution["Não"] || 0];
+  console.log(data);
   console.log('Classes Distribution:', classesDistribution);
   console.log('Data Values:', dataValues);
 
