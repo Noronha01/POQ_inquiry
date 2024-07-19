@@ -60,7 +60,9 @@ function findLatestSubmission(data) {
 
   // Assuming "Submitted at" is in the format "2024/07/17 17:59:25"
   const latestSubmission = data[data.length - 1]['Submitted at'];
-  return new Date(latestSubmission);
+  const submissionDate = new Date(latestSubmission);
+  submissionDate.setHours(submissionDate.getHours() - 1); // Adjust for the time zone difference
+  return submissionDate;
 }
 
 function calculateTimeAgo(date) {
