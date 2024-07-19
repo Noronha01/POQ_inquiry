@@ -172,6 +172,8 @@ function displayClassesDistributionChart(data) {
   const classesDistribution = getDataDistribution(data, "Tens aulas de Padel?");
   const labels = ["Yes", "No"];
   const dataValues = [classesDistribution["Sim"] || 0, classesDistribution["Não"] || 0];
+  console.log('Classes Distribution:', classesDistribution);
+  console.log('Data Values:', dataValues);
 
   const classesCtx = document.getElementById('classesChart').getContext('2d');
   createPieChart(classesCtx, labels, dataValues, 'Classes');
