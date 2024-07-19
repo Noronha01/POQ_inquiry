@@ -7,11 +7,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   try {
     // Fetch data from Google Sheets CSV
     const csvData = await fetchSheetData(sheet_url);
-    console.log(csvData);
     
     // Parse CSV data into objects
     const sheetObjects = Papa.parse(csvData, { header: true, skipEmptyLines: true }).data;
-    console.log(sheetObjects);
 
     // Display total submissions
     displayTotalSubmissions(sheetObjects);
@@ -28,6 +26,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Display age distribution chart
     displayAgeDistributionChart(sheetObjects);
     displayExperienceDistributionChart(sheetObjects);
+    displayWeeklyGamesDistributionChart(sheetObjects);
     displayClassesDistributionChart(sheetObjects);
   } catch (error) {
     console.error('Error initializing page:', error);
@@ -121,6 +120,30 @@ function displayExperienceDistributionChart(data) {
 
 function compareExperienceLabels(a, b) {
   const ageRanges = ["< 6 meses", "6 meses - 1 ano", "1 - 2 anos", "2 - 5 anos", "> 5 anos"];
+  return ageRanges.indexOf(a) - ageRanges.indexOf(b);
+}
+
+function displayWeeklyGamesDistributionChart(data) {
+  // Get the distribution of weekly games
+  const weeklyGamesDistribution = getDataDistribution(data, "Quantas vezes por semana jogas Padel");
+
+  // Transform the distribution by mapping "Não jogo todas as semanas" to "Irregular"
+  const transformedDistribution = Object.entries(weeklyGamesDistribution).map(([key, value]) => {
+    return [key === "Não jogo todas as semanas" ? "Irregular" : key, value];
+  });
+
+  // Sort the transformed distribution based on predefined labels
+  const sortedDistribution = transformedDistribution.sort((a, b) => compareWeeklyGamesLabels(a[0], b[0]));
+  const labels = sortedDistribution.map(entry => entry[0]);
+  const dataValues = sortedDistribution.map(entry => entry[1]);
+
+  // Create the chart
+  const weeklyGamesCtx = document.getElementById('weeklyGamesChart').getContext('2d');
+  createBarChart(weeklyGamesCtx, labels, dataValues, 'Weekly Games Distribution');
+}
+
+function compareWeeklyGamesLabels(a, b) {
+  const ageRanges = ["Irregular", "1 vez", "2 vezes", "3/4 vezes", "5+ vezes"];
   return ageRanges.indexOf(a) - ageRanges.indexOf(b);
 }
 
