@@ -32,6 +32,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     displayClassesDistributionChart(sheetObjects);
     displayExpensiveChart(sheetObjects);
     displayTennisChart(sheetObjects);
+    displayProblemsChart(sheetObjects);
+    displayRankingList(sheetObjects);
 
   } catch (error) {
     console.error('Error initializing page:', error);
@@ -282,6 +284,61 @@ function createPieChart(ctx, labels, data, datasetLabel) {
           }
         }
       }
+    }
+  });
+}
+
+function displayProblemsChart(data) {
+  const problemsDistribution = {};
+  
+  data.forEach(item => {
+    const problems = item["Maiores problemas que enfrentas no Padel"];
+    if (problems) {
+      problems.split(",").map(problem => problem.trim()).forEach(problem => {
+        problemsDistribution[problem] = (problemsDistribution[problem] || 0) + 1;
+      });
+    }
+  });
+
+  const sortedProblems = Object.entries(problemsDistribution).sort((a, b) => b[1] - a[1]);
+  const labels = sortedProblems.map(entry => entry[0]);
+  const dataValues = sortedProblems.map(entry => entry[1]);
+  const problemsCtx = document.getElementById('problemsChart').getContext('2d');
+  
+  new Chart(problemsCtx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Most Common Problems',
+        data: dataValues,
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      indexAxis: 'y',  // This makes the chart horizontal. Change to 'x' for vertical.
+      scales: {
+        x: {
+          beginAtZero: true,
+          ticks: {
+            color: 'white'
+          }
+        },
+        y: {
+          ticks: {
+            color: 'white'
+          }
+        }
+      },
+      plugins: {
+        legend: {
+          labels: {
+            color: 'white'
+          }
+        }
+      },
     }
   });
 }
